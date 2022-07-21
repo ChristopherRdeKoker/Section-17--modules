@@ -9,24 +9,19 @@ const budget = [
   { value: -1800, description: 'New Laptop 💻', user: 'jonas' },
 ];
 
-const Spendinglimits = {
+const spendingLimits = {
   jonas: 1500,
   matilda: 100,
 };
 
-const addExpense = function (value, description, user) {
-  if (!user) user = 'jonas';
+const addExpense = function (value, description, user = 'jonas') {
   user = user.toLowerCase();
 
-  let lim;
-  if (Spendinglimits[user]) {
-    lim = Spendinglimits[user];
-  } else {
-    lim = 0;
-  }
+  // const limit = spendingLimits[user] ? spendingLimits[user] : 0;
+  const limit = spendingLimits?.[user] ?? 0; //nullish coalscent
 
-  if (value <= lim) {
-    budget.push({ value: -value, description: description, user: user });
+  if (value <= limit) {
+    budget.push({ value: -value, description, user }); //ca
   }
 };
 addExpense(10, 'Pizza 🍕');
@@ -34,21 +29,16 @@ addExpense(100, 'Going to movies 🍿', 'Matilda');
 addExpense(200, 'Stuff', 'Jay');
 console.log(budget);
 
-const check = function () {
-  for (const el of budget) {
-    let lim;
-    if (Spendinglimits[el.user]) {
-      lim = Spendinglimits[el.user];
-    } else {
-      lim = 0;
-    }
+const checkExpenses = function () {
+  for (const entry of budget) {
+    const limit = spendingLimits?.[entry.user] ?? 0;
 
-    if (el.value < -lim) {
-      el.flag = 'limit';
+    if (entry.value < -limit) {
+      entry.flag = 'limit';
     }
   }
 };
-check();
+checkExpenses();
 
 console.log(budget);
 
@@ -63,4 +53,4 @@ const bigExpenses = function (limit) {
   console.log(output);
 };
 
-bigExpenses(100);
+bigExpenses(1000);
