@@ -28,8 +28,7 @@ const addExpense = function (
   const cleanUser = user.toLowerCase();
 
   return value <= getLimit(cleanUser)
-    ? // budget.push({ value: -value, description, user: cleanUser });
-      [...state, { value: -value, description, user: cleanUser }]
+    ? [...state, { value: -value, description, user: cleanUser }]
     : state;
 };
 const newBudget1 = addExpense(budget, spendingLimits, 10, 'Pizza 🍕');
@@ -60,15 +59,5 @@ const logBigExpenses = function (state, bigLimit) {
     .map(entry => entry.description.slice(-2))
     .join(' / ');
   console.log(bigExpenses);
-  //will log to console
-  // let output = '';
-  // for (const entry of budget)
-  //   output +=
-  //     entry.value <= -bigLimit ? `${entry.description.slice(-2)} / ` : '';
-
-  // output = output.slice(0, -2); // Remove last '/ '
-  // console.log(output);
 };
-
-// console.log(finalBudget, 500);
 logBigExpenses(finalBudget, 500);
