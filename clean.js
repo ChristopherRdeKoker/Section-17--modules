@@ -32,27 +32,43 @@ const addExpense = function (
       [...state, { value: -value, description, user: cleanUser }]
     : state;
 };
-const budget1 = addExpense(budget, spendingLimits, 10, 'Pizza 🍕');
-addExpense(budget, spendingLimits, 100, 'Going to movies 🍿', 'Matilda');
-addExpense(budget, spendingLimits, 200, 'Stuff', 'Jay');
-console.log(budget1);
+const newBudget1 = addExpense(budget, spendingLimits, 10, 'Pizza 🍕');
+const newBudget2 = addExpense(
+  newBudget1,
+  spendingLimits,
+  100,
+  'Going to movies 🍿',
+  'Matilda'
+);
+const newBudget3 = addExpense(newBudget2, spendingLimits, 200, 'Stuff', 'Jay');
+//////////////////////////
 
-const checkExpenses = function () {
-  for (const entry of budget)
-    if (entry.value < -getLimit(entry.user)) entry.flag = 'limit';
-};
-checkExpenses();
+const checkExpenses = (state, limits) =>
+  state.map(entry =>
+    entry.value < -getLimit(limits, entry.user)
+      ? { ...entry, flag: 'limits' }
+      : entry
+  );
 
-const logBigExpenses = function (bigLimit) {
+// checkExpenses();
+const finalBudget = checkExpenses(newBudget3, spendingLimits);
+console.log(finalBudget);
+
+const logBigExpenses = function (state, bigLimit) {
+  const bigExpenses = state
+    .filter(entry => entry.value <= -bigLimit)
+    .map(entry => entry.description.slice(-2))
+    .join(' / ');
+  console.log(bigExpenses);
   //will log to console
-  let output = '';
-  for (const entry of budget)
-    output +=
-      entry.value <= -bigLimit ? `${entry.description.slice(-2)} / ` : '';
+  // let output = '';
+  // for (const entry of budget)
+  //   output +=
+  //     entry.value <= -bigLimit ? `${entry.description.slice(-2)} / ` : '';
 
-  output = output.slice(0, -2); // Remove last '/ '
-  console.log(output);
+  // output = output.slice(0, -2); // Remove last '/ '
+  // console.log(output);
 };
 
-console.log(budget);
-logBigExpenses(500);
+// console.log(finalBudget, 500);
+logBigExpenses(finalBudget, 500);
